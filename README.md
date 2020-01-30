@@ -1,5 +1,9 @@
 # show-1wire-id
-Displays the ID of a Maxim 1-wire Sensor on a Rasperry Pi with OLED display.
+
+Displays the ID of a Maxim 1-wire Sensor on a Rasperry Pi with OLED display.  This
+was primarily designed to be used when labeling 1-wire sensors.  It is set up to
+display the ID of just one sensor.  An alternative use is testing the operability
+of a 1-wire Master interface circuit.
 
 Designed to work with the [Adafruit PiOLED 128x32 display](https://www.adafruit.com/product/3527).
 
