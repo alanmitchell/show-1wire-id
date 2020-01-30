@@ -18,54 +18,54 @@ oled = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c)
 font = ImageFont.truetype('DejaVuSans.ttf', 17)
 
 def text(line1, line2):
-	# Clear display.
-	oled.fill(0)
-	oled.show()
+    # Clear display.
+    oled.fill(0)
+    oled.show()
 
-	# Create blank image for drawing.
-	image = Image.new('1', (oled.width, oled.height))
-	draw = ImageDraw.Draw(image)
+    # Create blank image for drawing.
+    image = Image.new('1', (oled.width, oled.height))
+    draw = ImageDraw.Draw(image)
 
-	# Draw the text
-	draw.text((0, 0), line1, font=font, fill=255)
-	draw.text((0, 16), line2, font=font, fill=255)
+    # Draw the text
+    draw.text((0, 0), line1, font=font, fill=255)
+    draw.text((0, 16), line2, font=font, fill=255)
 
-	# Display image
-	oled.image(image)
-	oled.show()
+    # Display image
+    oled.image(image)
+    oled.show()
 
 def error_display():
-	"""What to display when no Master adapter is connected or
-	no sensors are connected.
-	"""
-	text('   No', 'Device')
-	
+    """What to display when no Master adapter is connected or
+    no sensors are connected.
+    """
+    text('   No', 'Device')
+    
 while True:
-	
-	# Find all the FTDI serial ports.  We assume the adapter is on the
-	# first one.
-	ports = glob('/dev/serial/by-id/*FTDI*')
+    
+    # Find all the FTDI serial ports.  We assume the adapter is on the
+    # first one.
+    ports = glob('/dev/serial/by-id/*FTDI*')
 
-	try:
-		proc = subprocess.run(
-			f'/usr/bin/digitemp_DS9097U -i -s {ports[0]}', 
-			check=True, 
-			shell=True, 
-			stdout=subprocess.PIPE, 
-			universal_newlines=True,
-			)
-		output = proc.stdout
-		if 'ROM #0' in output:
-			# There is a sensor connected.  Read the ID from the last line.
-			last = output.splitlines()[-1]
-			s = last.split(':')[-1].strip()
-			s = s[:-2]
-			line1 = f'{s[:2]}.  {s[2:4]} {s[4:6]} {s[6:8]}'
-			line2 = f'{s[8:10]} {s[10:12]} {s[12:14]}'
-			text(line1, line2)
-		else:
-			error_display()
-	except:
-		error_display()
+    try:
+        proc = subprocess.run(
+            f'/usr/bin/digitemp_DS9097U -i -s {ports[0]}', 
+            check=True, 
+            shell=True, 
+            stdout=subprocess.PIPE, 
+            universal_newlines=True,
+            )
+        output = proc.stdout
+        if 'ROM #0' in output:
+            # There is a sensor connected.  Read the ID from the last line.
+            last = output.splitlines()[-1]
+            s = last.split(':')[-1].strip()
+            s = s[:-2]
+            line1 = f'{s[:2]}.  {s[2:4]} {s[4:6]} {s[6:8]}'
+            line2 = f'{s[8:10]} {s[10:12]} {s[12:14]}'
+            text(line1, line2)
+        else:
+            error_display()
+    except:
+        error_display()
 
-	time.sleep(1)
+    time.sleep(1)
